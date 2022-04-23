@@ -12,8 +12,13 @@ namespace Celeste.Mod.ShatteringStrawberries {
         }
 
         public override void Load() {
-            Shattering.InitializeContent();
             Hooks.Hook();
+        }
+
+        public override void LoadContent(bool firstLoad) {
+            base.LoadContent(firstLoad);
+
+            Shattering.InitializeContent();
         }
 
         public override void Unload() {
