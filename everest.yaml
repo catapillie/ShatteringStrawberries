@@ -1,6 +1,6 @@
 - Name: ShatteringStrawberries
   Version: 1.0.0
-  DLL: bin/Debug/net452/ShatteringStrawberries.dll
+  DLL: Code/bin/Debug/net452/ShatteringStrawberries.dll
   Dependencies:
     - Name: Everest
       Version: 1.3324.0
