@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.ShatteringStrawberries {
     public class ShatteringStrawberriesModule : EverestModule {
@@ -13,11 +12,12 @@ namespace Celeste.Mod.ShatteringStrawberries {
         }
 
         public override void Load() {
-            // TODO: apply any hooks that should always be active
+            Shattering.InitializeContent();
+            Hooks.Hook();
         }
 
         public override void Unload() {
-            // TODO: unapply any hooks applied in Load()
+            Hooks.Unhook();
         }
     }
 }
