@@ -39,8 +39,8 @@ namespace Celeste.Mod.ShatteringStrawberries {
                 level.Particles.Emit(explodeParticle, position, num);
             }
 
-            for (int i = 0; i < 8; ++i)
-                level.Add(new StrawberryDebris(strawberry.Position));
+            for (int i = 0; i < 16; ++i)
+                level.Add(new StrawberryDebris(strawberry));
 
             Audio.Play(SFX.game_10_puffer_splode, strawberry.Position);
         }

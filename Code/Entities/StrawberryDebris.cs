@@ -6,6 +6,8 @@ using System;
 
 namespace Celeste.Mod.ShatteringStrawberries.Entities {
     public class StrawberryDebris : Actor {
+        public static MTexture[] Shards_Strawberry { get; private set; }
+
         public const float BlastAngleRange = 2.35619449019f;
         public const float MaxFallSpeed = 280f;
         public const float Gravity = 220f;
@@ -14,7 +16,10 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private float lifeTime;
 
-        public Vector2 Speed;
+        private Vector2 speed;
+        private float rotation = Calc.Random.NextFloat(MathHelper.TwoPi);
+        private float rotationVel = Calc.Random.Range(-6f, 6f);
+
         private bool hitGround;
 
         private readonly SoundSource sfx = new(SFX.char_mad_wallslide);
@@ -22,23 +27,28 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private Level level;
 
-        public StrawberryDebris(Vector2 position)
-            : base(position) {
+        private readonly MTexture shard = Calc.Random.Choose(Shards_Strawberry);
+
+        public StrawberryDebris(Strawberry strawberry)
+            : base(strawberry.Position) {
             Collider = new Hitbox(4, 4, -2, -2);
 
             float angle = Calc.Random.Range(-BlastAngleRange, BlastAngleRange) - MathHelper.PiOver2;
             float mag = Calc.Random.Range(80, 160);
 
-            Speed = Calc.AngleToVector(angle, mag);
-            Speed.X *= 1.2f;
-            if (Speed.Y < 0)
-                Speed.Y *= 1.3f;
+            speed = Calc.AngleToVector(angle, mag);
+            speed.X *= 1.2f;
+            if (speed.Y < 0)
+                speed.Y *= 1.3f;
 
             Add(sfx);
             sfx.Pause();
 
             eventInstance = (EventInstance)new DynData<SoundSource>(sfx)["instance"];
             eventInstance.setVolume(2f);
+
+            BloomPoint bloom = strawberry.Get<BloomPoint>();
+            Add(new BloomPoint(bloom.Alpha / 2f, bloom.Radius / 2f));
         }
 
         public override void Awake(Scene scene) {
@@ -53,22 +63,22 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             bool onGround = OnGround();
 
             float friction = onGround ? GroundFriction : AirFriction;
-            Speed.X = Calc.Approach(Speed.X, 0, friction * Engine.DeltaTime);
+            speed.X = Calc.Approach(speed.X, 0, friction * Engine.DeltaTime);
             if (!onGround)
-                Speed.Y = Calc.Approach(Speed.Y, MaxFallSpeed, Gravity * Engine.DeltaTime);
+                speed.Y = Calc.Approach(speed.Y, MaxFallSpeed, Gravity * Engine.DeltaTime);
 
             hitGround = false;
-            MoveH(Speed.X * Engine.DeltaTime, OnCollideH);
-            MoveV(Speed.Y * Engine.DeltaTime, OnCollideV);
+            MoveH(speed.X * Engine.DeltaTime, OnCollideH);
+            MoveV(speed.Y * Engine.DeltaTime, OnCollideV);
 
             bool sliding = false;
             float slideAmount = 0f;
             bool isCurrentlyOnGround = hitGround || onGround;
-            if (isCurrentlyOnGround && Speed.Y == 0 && Speed.X != 0) {
+            if (isCurrentlyOnGround && speed.Y == 0 && speed.X != 0) {
                 level.Particles.Emit(ParticleTypes.Dust, new Vector2(CenterX, Bottom), Color.White);
                 sliding = true;
-                slideAmount = Math.Abs(Speed.X);
-            } else if (!isCurrentlyOnGround && Speed.Y != 0 && Speed.X == 0) {
+                slideAmount = Math.Abs(speed.X);
+            } else if (!isCurrentlyOnGround && speed.Y != 0 && speed.X == 0) {
                 if (CollideCheck<Solid>(Position + new Vector2(-1, 0))) {
                     level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
                     sliding = true;
@@ -77,8 +87,10 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                     level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
                     sliding = true;
                 }
-                slideAmount = Math.Abs(Speed.Y);
+                slideAmount = Math.Abs(speed.Y);
             }
+
+            rotation += rotationVel * Engine.DeltaTime;
 
             if (sfx.Playing)
                 eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
@@ -92,16 +104,18 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         private void OnCollideH(CollisionData data) {
-            Speed.X = 0;
+            speed.X = 0f;
+            rotationVel = 0f;
         }
 
         private void OnCollideV(CollisionData data) {
-            if (Speed.Y > 0) {
-                ImpactSfx(Speed.Y);
+            if (speed.Y > 0) {
+                ImpactSfx(speed.Y);
                 hitGround = true;
             }
 
-            Speed.Y = 0;
+            speed.Y = 0f;
+            rotationVel = 0f;
         }
 
         private void ImpactSfx(float speed)
@@ -110,7 +124,11 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         public override void Render() {
             base.Render();
 
-            Draw.HollowRect(Collider, Vector2.Zero == Speed ? Color.Red : Color.Blue);
+            shard.DrawCentered(Center, Color.White, 1f, rotation);
+        }
+
+        internal static void InitializeContent() {
+            Shards_Strawberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards_strawberry/").ToArray();
         }
     }
 }

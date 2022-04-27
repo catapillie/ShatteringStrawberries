@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Celeste.Mod.ShatteringStrawberries.Entities;
+using System;
 
 namespace Celeste.Mod.ShatteringStrawberries {
     public class ShatteringStrawberriesModule : EverestModule {
@@ -19,6 +20,7 @@ namespace Celeste.Mod.ShatteringStrawberries {
             base.LoadContent(firstLoad);
 
             Shattering.InitializeContent();
+            StrawberryDebris.InitializeContent();
         }
 
         public override void Unload() {
