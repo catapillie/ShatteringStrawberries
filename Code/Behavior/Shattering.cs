@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste.Mod.ShatteringStrawberries.Entities;
+using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 using System;
@@ -30,13 +31,16 @@ namespace Celeste.Mod.ShatteringStrawberries {
             else
                 explodeParticle = ghost ? P_GhostStrawberryExplode : P_RedStrawberryExplode;
 
-                Level level = strawberry.SceneAs<Level>();
+            Level level = strawberry.SceneAs<Level>();
             level.Shake();
             level.Displacement.AddBurst(strawberry.Position, 0.4f, 12f, 36f, 0.5f);
             for (float num = 0f; num < (float)Math.PI * 2f; num += 0.17453292f) {
                 Vector2 position = strawberry.Center + Calc.AngleToVector(num + Calc.Random.Range(-(float)Math.PI / 90f, (float)Math.PI / 90f), Calc.Random.Range(4, 10));
                 level.Particles.Emit(explodeParticle, position, num);
             }
+
+            for (int i = 0; i < 8; ++i)
+                level.Add(new StrawberryDebris(strawberry.Position));
 
             Audio.Play(SFX.game_10_puffer_splode, strawberry.Position);
         }

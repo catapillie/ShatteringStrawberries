@@ -18,14 +18,14 @@ namespace Celeste.Mod.ShatteringStrawberries {
 
         #endregion
 
-        private static ILHook Strawberry_CollectRountine_ILHook;
+        private static ILHook IL_Strawberry_CollectRountine;
 
         internal static void Hook() {
-            Strawberry_CollectRountine_ILHook = new ILHook(Strawberry_CollectRountine, Mod_Strawberry_CollectRountine);
+            IL_Strawberry_CollectRountine = new ILHook(Strawberry_CollectRountine, Mod_Strawberry_CollectRountine);
         }
 
         internal static void Unhook() {
-            Strawberry_CollectRountine_ILHook.Dispose();
+            IL_Strawberry_CollectRountine.Dispose();
         }
 
         private static void Mod_Strawberry_CollectRountine(ILContext il) {
