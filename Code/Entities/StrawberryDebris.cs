@@ -1,4 +1,5 @@
-﻿using FMOD.Studio;
+﻿using Celeste.Mod.ShatteringStrawberries.Components;
+using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
@@ -12,7 +13,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         public const float MaxFallSpeed = 280f;
         public const float Gravity = 220f;
         public const float AirFriction = 5f;
-        public const float GroundFriction = 45f;
+        public const float GroundFriction = 75f;
 
         private float lifeTime;
 
@@ -29,8 +30,10 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private readonly MTexture shard = Calc.Random.Choose(Shards_Strawberry);
 
+        private StrawberrySpreadJuice spreadJuice;
+
         public StrawberryDebris(Strawberry strawberry)
-            : base(strawberry.Position) {
+            : base(Calc.Floor(strawberry.Position)) {
             Collider = new Hitbox(4, 4, -2, -2);
 
             float angle = Calc.Random.Range(-BlastAngleRange, BlastAngleRange) - MathHelper.PiOver2;
@@ -64,8 +67,10 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             float friction = onGround ? GroundFriction : AirFriction;
             speed.X = Calc.Approach(speed.X, 0, friction * Engine.DeltaTime);
-            if (!onGround)
+            if (!onGround) {
                 speed.Y = Calc.Approach(speed.Y, MaxFallSpeed, Gravity * Engine.DeltaTime);
+                spreadJuice = null;
+            }
 
             hitGround = false;
             MoveH(speed.X * Engine.DeltaTime, OnCollideH);
@@ -92,8 +97,10 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             rotation += rotationVel * Engine.DeltaTime;
 
-            if (sfx.Playing)
+            if (sliding) {
                 eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
+                spreadJuice?.Extend();
+            }
 
             if (sliding && !sfx.Playing)
                 sfx.Resume();
@@ -112,6 +119,11 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             if (speed.Y > 0) {
                 ImpactSfx(speed.Y);
                 hitGround = true;
+
+                Solid solid = CollideFirst<Solid>(Position + Vector2.UnitY);
+                if (solid != null) {
+                    solid.Add(spreadJuice = new StrawberrySpreadJuice(this));
+                }
             }
 
             speed.Y = 0f;
