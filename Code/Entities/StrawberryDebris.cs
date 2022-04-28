@@ -32,7 +32,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private readonly MTexture shard = Calc.Random.Choose(Shards_Strawberry);
 
-        private StrawberrySpreadJuice spreadJuice;
+        private StrawberrySpreadJuice groundJuice, leftWallJuice, rightWallJuice;
 
         public StrawberryDebris(Strawberry strawberry)
             : base(Calc.Floor(strawberry.Position)) {
@@ -76,7 +76,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             // Our Y speed has changed sign, so let's dismiss the current spread juice component
             if (speed.Y * oldYSpeed < 0)
-                spreadJuice = null;
+                DismissJuice();
 
             Vector2 oldPos = Position;
 
@@ -84,42 +84,57 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             MoveH(speed.X * Engine.DeltaTime, OnCollideH);
             MoveV(speed.Y * Engine.DeltaTime, OnCollideV);
 
+            bool doParticles = Scene.OnInterval(0.02f);
+
             bool sliding = false;
             float slideAmount = 0f;
             bool isCurrentlyOnGround = hitGround || onGround;
+
+            float dx = X - oldPos.X;
+            float dy = Y - oldPos.Y;
+
             if (isCurrentlyOnGround && speed.Y == 0 && speed.X != 0) {
-                level.Particles.Emit(ParticleTypes.Dust, new Vector2(CenterX, Bottom), Color.White);
+                if (doParticles)
+                    level.Particles.Emit(ParticleTypes.Dust, new Vector2(CenterX, Bottom), Color.White);
+
                 sliding = true;
                 slideAmount = Math.Abs(speed.X);
+
                 TryCreateGroundSpreadJuice();
+                groundJuice?.Extend(dx);
             } else if (!isCurrentlyOnGround && speed.Y != 0 && speed.X == 0) {
                 Platform platform = null;
+
                 if ((platform = CollideFirstOutside<Platform>(Position - Vector2.UnitX)) != null) {
-                    level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
+                    if (doParticles)
+                        level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
+
                     sliding = true;
 
-                    if (spreadJuice == null)
-                        platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform, -1));
+                    if (leftWallJuice == null)
+                        platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, -1));
+                    leftWallJuice?.Extend(dy);
                 }
+
                 if ((platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX)) != null) {
-                    level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
+                    if (doParticles)
+                        level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
+
                     sliding = true;
 
-                    if (spreadJuice == null)
-                        platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform, 1));
+                    if (rightWallJuice == null)
+                        platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                    rightWallJuice?.Extend(dy);
                 }
                 slideAmount = Math.Abs(speed.Y);
             }
 
             rotation += rotationVel * Engine.DeltaTime;
 
-            if (sliding) {
+            if (sliding)
                 eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
-
-                if (spreadJuice != null)
-                    spreadJuice.Extend(spreadJuice.Orientation == 0 ? (X - oldPos.X) : (Y - oldPos.Y));
-            } else
-                spreadJuice = null;
+            else
+                DismissJuice();
 
             if (sliding && !sfx.Playing)
                 sfx.Resume();
@@ -134,8 +149,13 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         private void OnCollideH(CollisionData data) {
-            if (speed.X != 0)
-                TryCreateWallSpreadJuice(Math.Sign(speed.X));
+            if (speed.X != 0) {
+                int sign = Math.Sign(speed.X);
+                if (sign > 0)
+                    TryCreateRightWallSpreadJuice();
+                else
+                    TryCreateLeftWallSpreadJuice();
+            }
 
             speed.X = 0f;
             rotationVel = 0f;
@@ -154,20 +174,31 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         private void TryCreateGroundSpreadJuice() {
-            if (spreadJuice == null) {
+            if (groundJuice == null) {
                 Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitY);
                 if (platform != null)
-                    platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform));
+                    platform.Add(groundJuice = new StrawberrySpreadJuice(this, platform));
             }
         }
 
-        private void TryCreateWallSpreadJuice(int sign) {
-            if (spreadJuice == null) {
-                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX * sign);
+        private void TryCreateLeftWallSpreadJuice() {
+            if (leftWallJuice == null) {
+                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
                 if (platform != null)
-                    platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform, (short)sign));
+                    platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, 1));
             }
         }
+
+        private void TryCreateRightWallSpreadJuice() {
+            if (rightWallJuice == null) {
+                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
+                if (platform != null)
+                    platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+            }
+        }
+
+        private void DismissJuice()
+            => groundJuice = leftWallJuice = rightWallJuice = null;
 
         private void ImpactSfx(float speed)
             => Audio.Play(SFX.game_gen_debris_dirt, Position, "debris_velocity", Calc.ClampedMap(speed, 0f, 150f));
