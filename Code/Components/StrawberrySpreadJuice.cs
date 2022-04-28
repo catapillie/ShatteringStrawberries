@@ -5,32 +5,29 @@ using System;
 
 namespace Celeste.Mod.ShatteringStrawberries.Components {
     public class StrawberrySpreadJuice : Component {
-        private readonly StrawberryDebris debris;
+        private readonly Vector2 offset;
 
-        private float from, to;
-        private readonly float y;
+        private Vector2 scale = new(1);
+        private float extend;
+        private MTexture texture;
 
-        public StrawberrySpreadJuice(StrawberryDebris debris)
+        public StrawberrySpreadJuice(StrawberryDebris debris, Platform platform)
             : base(active: true, visible: true) {
-            this.debris = debris;
-            from = to = debris.CenterX;
-            y = debris.Bottom;
+            offset = new Vector2(debris.Center.X, debris.Bottom) - platform.Position;
         }
 
-        public void Extend() {
-            to = debris.CenterX; 
+        public void Extend(float amount) {
+            //to = debris.CenterX;
+            extend += amount;
+
+            scale.X = Math.Sign(extend);
+            float length = Calc.Clamp(Math.Abs(extend) - 3, 1, 64);
+            texture = GFX.Game["ShatteringStrawberries/juice/strawberry"]
+                .GetSubtexture(0, 0, (int)length, 5);
+            Console.WriteLine(length);
         }
 
-        public override void Render() {
-            float d = to - from;
-            float l = Math.Abs(d);
-            int sign = Math.Sign(d);
-            Vector2 scale = new(sign, 1);
-
-            GFX.Game["ShatteringStrawberries/juice/strawberry"]
-                .GetSubtexture(0, 0, Calc.Clamp((int)l - 3, 1, 64), 5)
-                .Draw(new(from, y), Vector2.Zero, Color.White, scale);
-
-        }
+        public override void Render() 
+            => texture?.Draw(Entity.Position + offset, Vector2.Zero, Color.White, scale);
     }
 }

@@ -72,6 +72,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 spreadJuice = null;
             }
 
+            float oldX = X;
+
             hitGround = false;
             MoveH(speed.X * Engine.DeltaTime, OnCollideH);
             MoveV(speed.Y * Engine.DeltaTime, OnCollideV);
@@ -99,7 +101,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             if (sliding) {
                 eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
-                spreadJuice?.Extend();
+                spreadJuice?.Extend(X - oldX);
             }
 
             if (sliding && !sfx.Playing)
@@ -120,9 +122,9 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 ImpactSfx(speed.Y);
                 hitGround = true;
 
-                Solid solid = CollideFirst<Solid>(Position + Vector2.UnitY);
-                if (solid != null) {
-                    solid.Add(spreadJuice = new StrawberrySpreadJuice(this));
+                Platform platform = CollideFirst<Platform>(Position + Vector2.UnitY);
+                if (platform != null) {
+                    platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform));
                 }
             }
 
