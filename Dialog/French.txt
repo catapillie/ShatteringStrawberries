@@ -1,0 +1,12 @@
+# Leaving the mod's name untranslated.
+
+modoptions_ShatteringStrawberries_Enabled=Activé
+modoptions_ShatteringStrawberries_Enabled_desc=Active ou désactive ce mod.
+
+modoptions_ShatteringStrawberries_Shards=Morceaux de fraises
+modoptions_ShatteringStrawberries_Shards_desc=Brise les fraises en morceaux envoyés dans toutes les directions.
+
+modoptions_ShatteringStrawberries_Juice=Jus de fraise
+modoptions_ShatteringStrawberries_Juice_desc=Les éclats de fraises étalent leur jus sur les plateformes sur lesquelles ils glissent.
+modoptions_ShatteringStrawberries_Juice_warn_a=AVERTISSEMENT: Peut ressembler à du sang, et être dérangeant.
+modoptions_ShatteringStrawberries_Juice_warn_b=Tu peux laisser cette option désactivée si tu te sens mal à l'aise.
