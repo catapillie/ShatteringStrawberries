@@ -8,6 +8,11 @@ using System;
 namespace Celeste.Mod.ShatteringStrawberries.Entities {
     public class StrawberryDebris : Actor {
         public static MTexture[] Shards_Strawberry { get; private set; }
+        public static MTexture[] Shards_Ghostberry { get; private set; }
+        public static MTexture[] Shards_Goldenberry { get; private set; }
+        public static MTexture[] Shards_Goldghostberry { get; private set; }
+        public static MTexture[] Shards_Moonberry { get; private set; }
+        public static MTexture[] Shards_Ghostmoonberry { get; private set; }
 
         public const float BlastAngleRange = 2.35619449019f;
         public const float MaxFallSpeed = 280f;
@@ -213,7 +218,12 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         internal static void InitializeContent() {
-            Shards_Strawberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards_strawberry/").ToArray();
+            Shards_Strawberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/strawberry/").ToArray();
+            Shards_Ghostberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/ghostberry/").ToArray();
+            Shards_Goldenberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/goldenberry/").ToArray();
+            Shards_Goldghostberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/goldghostberry/").ToArray();
+            Shards_Moonberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/moonberry/").ToArray();
+            Shards_Ghostmoonberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/ghostmoonberry/").ToArray();
         }
     }
 }

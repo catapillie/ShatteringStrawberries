@@ -24,12 +24,39 @@ namespace Celeste.Mod.ShatteringStrawberries {
             bool ghost = (bool)data["isGhostBerry"];
 
             ParticleType explodeParticle;
-            if (strawberry.Golden)
-                explodeParticle = ghost ? P_GhostStrawberryExplode : P_GoldStrawberryExplode;
-            else if (strawberry.Moon)
-                explodeParticle = ghost ? P_GhostMoonStrawberryExplode : P_MoonStrawberryExplode;
-            else
-                explodeParticle = ghost ? P_GhostStrawberryExplode : P_RedStrawberryExplode;
+            MTexture[] shards;
+            Color color;
+            if (strawberry.Golden) {
+                if (ghost) {
+                    explodeParticle = P_GhostStrawberryExplode;
+                    shards = StrawberryDebris.Shards_Goldghostberry;
+                    color = GhostStrawberryColor;
+                } else {
+                    explodeParticle = P_GoldStrawberryExplode;
+                    shards = StrawberryDebris.Shards_Goldenberry;
+                    color = GoldStrawberryColor;
+                }
+            } else if (strawberry.Moon) {
+                if (ghost) {
+                    explodeParticle = P_GhostMoonStrawberryExplode;
+                    shards = StrawberryDebris.Shards_Ghostmoonberry;
+                    color = GhostMoonStrawberryColor;
+                } else {
+                    explodeParticle = P_MoonStrawberryExplode;
+                    shards = StrawberryDebris.Shards_Moonberry;
+                    color = MoonStrawberryColor;
+                }
+            } else {
+                if (ghost) {
+                    explodeParticle = P_GhostStrawberryExplode;
+                    shards = StrawberryDebris.Shards_Ghostberry;
+                    color = GhostStrawberryColor;
+                } else {
+                    explodeParticle = P_RedStrawberryExplode;
+                    shards = StrawberryDebris.Shards_Strawberry;
+                    color = RedStrawberryColor;
+                }
+            }
 
             Level level = strawberry.SceneAs<Level>();
             level.Shake();
@@ -39,10 +66,9 @@ namespace Celeste.Mod.ShatteringStrawberries {
                 level.Particles.Emit(explodeParticle, position, num);
             }
 
-            Color color = RedStrawberryColor;
             color *= 0.75f;
             for (int i = 0; i < 16; ++i) {
-                MTexture texture = Calc.Random.Choose(StrawberryDebris.Shards_Strawberry);
+                MTexture texture = Calc.Random.Choose(shards);
                 level.Add(new StrawberryDebris(strawberry, texture, color));
             }
 
