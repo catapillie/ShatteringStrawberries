@@ -37,6 +37,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private readonly MTexture shard;
 
+        private readonly bool spreadsJuice;
         private StrawberrySpreadJuice groundJuice, leftWallJuice, rightWallJuice;
         public readonly Color JuiceColor;
 
@@ -63,6 +64,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             shard = texture;
             JuiceColor = color;
+
+            spreadsJuice = ShatteringStrawberriesModule.Settings.Juice;
         }
 
         public override void Awake(Scene scene) {
@@ -119,7 +122,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
                     sliding = true;
 
-                    if (leftWallJuice == null)
+                    if (leftWallJuice == null && spreadsJuice)
                         platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, -1));
                     leftWallJuice?.Extend(dy);
                 }
@@ -130,7 +133,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
                     sliding = true;
 
-                    if (rightWallJuice == null)
+                    if (rightWallJuice == null && spreadsJuice)
                         platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
                     rightWallJuice?.Extend(dy);
                 }
@@ -182,26 +185,32 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         private void TryCreateGroundSpreadJuice() {
-            if (groundJuice == null) {
-                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitY);
-                if (platform != null)
-                    platform.Add(groundJuice = new StrawberrySpreadJuice(this, platform));
+            if (spreadsJuice) {
+                if (groundJuice == null) {
+                    Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitY);
+                    if (platform != null)
+                        platform.Add(groundJuice = new StrawberrySpreadJuice(this, platform));
+                }
             }
         }
 
         private void TryCreateLeftWallSpreadJuice() {
-            if (leftWallJuice == null) {
-                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
-                if (platform != null)
-                    platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+            if (spreadsJuice) {
+                if (leftWallJuice == null) {
+                    Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
+                    if (platform != null)
+                        platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                }
             }
         }
 
         private void TryCreateRightWallSpreadJuice() {
-            if (rightWallJuice == null) {
-                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
-                if (platform != null)
-                    platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+            if (spreadsJuice) {
+                if (rightWallJuice == null) {
+                    Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
+                    if (platform != null)
+                        platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                }
             }
         }
 
