@@ -30,11 +30,12 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private Level level;
 
-        private readonly MTexture shard = Calc.Random.Choose(Shards_Strawberry);
+        private readonly MTexture shard;
 
         private StrawberrySpreadJuice groundJuice, leftWallJuice, rightWallJuice;
+        public readonly Color JuiceColor;
 
-        public StrawberryDebris(Strawberry strawberry)
+        public StrawberryDebris(Strawberry strawberry, MTexture texture, Color color)
             : base(Calc.Floor(strawberry.Position)) {
             Collider = new Hitbox(4, 4, -2, -2);
 
@@ -54,11 +55,13 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             BloomPoint bloom = strawberry.Get<BloomPoint>();
             Add(new BloomPoint(bloom.Alpha / 2f, bloom.Radius / 2f));
+
+            shard = texture;
+            JuiceColor = color;
         }
 
         public override void Awake(Scene scene) {
             base.Awake(scene);
-
             level = Scene as Level;
         }
 

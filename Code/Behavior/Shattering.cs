@@ -39,8 +39,12 @@ namespace Celeste.Mod.ShatteringStrawberries {
                 level.Particles.Emit(explodeParticle, position, num);
             }
 
-            for (int i = 0; i < 16; ++i)
-                level.Add(new StrawberryDebris(strawberry));
+            Color color = RedStrawberryColor;
+            color *= 0.75f;
+            for (int i = 0; i < 16; ++i) {
+                MTexture texture = Calc.Random.Choose(StrawberryDebris.Shards_Strawberry);
+                level.Add(new StrawberryDebris(strawberry, texture, color));
+            }
 
             Audio.Play(SFX.game_10_puffer_splode, strawberry.Position);
         }
