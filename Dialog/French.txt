@@ -8,5 +8,5 @@ modoptions_ShatteringStrawberries_Shards_desc=Brise les fraises en morceaux envo
 
 modoptions_ShatteringStrawberries_Juice=Jus de fraise
 modoptions_ShatteringStrawberries_Juice_desc=Les éclats de fraises étalent leur jus sur les plateformes sur lesquelles ils glissent.
-modoptions_ShatteringStrawberries_Juice_warn_a=AVERTISSEMENT: Peut ressembler à du sang, et être dérangeant.
+modoptions_ShatteringStrawberries_Juice_warn_a=AVERTISSEMENT: Peut ressembler à du sang, et te sembler dérangeant.
 modoptions_ShatteringStrawberries_Juice_warn_b=Tu peux laisser cette option désactivée si tu te sens mal à l'aise.
