@@ -65,14 +65,18 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             bool onGround = OnGround();
 
+            float oldYSpeed = speed.Y;
+
             float friction = onGround ? GroundFriction : AirFriction;
             speed.X = Calc.Approach(speed.X, 0, friction * Engine.DeltaTime);
-            if (!onGround) {
+            if (!onGround)
                 speed.Y = Calc.Approach(speed.Y, MaxFallSpeed, Gravity * Engine.DeltaTime);
-                spreadJuice = null;
-            }
 
-            float oldX = X;
+            // Our Y speed has changed sign, so let's dismiss the current spread juice component
+            if (speed.Y * oldYSpeed < 0)
+                spreadJuice = null;
+
+            Vector2 oldPos = Position;
 
             hitGround = false;
             MoveH(speed.X * Engine.DeltaTime, OnCollideH);
@@ -85,14 +89,22 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 level.Particles.Emit(ParticleTypes.Dust, new Vector2(CenterX, Bottom), Color.White);
                 sliding = true;
                 slideAmount = Math.Abs(speed.X);
+                TryCreateGroundSpreadJuice();
             } else if (!isCurrentlyOnGround && speed.Y != 0 && speed.X == 0) {
-                if (CollideCheck<Solid>(Position + new Vector2(-1, 0))) {
+                Platform platform = null;
+                if ((platform = CollideFirstOutside<Platform>(Position - Vector2.UnitX)) != null) {
                     level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
                     sliding = true;
+
+                    if (spreadJuice == null)
+                        platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform, -1));
                 }
-                if (CollideCheck<Solid>(Position + new Vector2(1, 0))) {
+                if ((platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX)) != null) {
                     level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
                     sliding = true;
+
+                    if (spreadJuice == null)
+                        platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform, 1));
                 }
                 slideAmount = Math.Abs(speed.Y);
             }
@@ -101,8 +113,11 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             if (sliding) {
                 eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
-                spreadJuice?.Extend(X - oldX);
-            }
+
+                if (spreadJuice != null)
+                    spreadJuice.Extend(spreadJuice.Orientation == 0 ? (X - oldPos.X) : (Y - oldPos.Y));
+            } else
+                spreadJuice = null;
 
             if (sliding && !sfx.Playing)
                 sfx.Resume();
@@ -113,6 +128,9 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         private void OnCollideH(CollisionData data) {
+            if (speed.X != 0)
+                TryCreateWallSpreadJuice(Math.Sign(speed.X));
+
             speed.X = 0f;
             rotationVel = 0f;
         }
@@ -122,14 +140,27 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 ImpactSfx(speed.Y);
                 hitGround = true;
 
-                Platform platform = CollideFirst<Platform>(Position + Vector2.UnitY);
-                if (platform != null) {
-                    platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform));
-                }
+                TryCreateGroundSpreadJuice();
             }
 
             speed.Y = 0f;
             rotationVel = 0f;
+        }
+
+        private void TryCreateGroundSpreadJuice() {
+            if (spreadJuice == null) {
+                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitY);
+                if (platform != null)
+                    platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform));
+            }
+        }
+
+        private void TryCreateWallSpreadJuice(int sign) {
+            if (spreadJuice == null) {
+                Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX * sign);
+                if (platform != null)
+                    platform.Add(spreadJuice = new StrawberrySpreadJuice(this, platform, (short)sign));
+            }
         }
 
         private void ImpactSfx(float speed)
