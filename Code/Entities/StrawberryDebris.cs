@@ -18,6 +18,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         private float lifeTime;
 
         private Vector2 speed;
+        private Vector2 previousLiftSpeed;
+
         private float rotation = Calc.Random.NextFloat(MathHelper.TwoPi);
         private float rotationVel = Calc.Random.Range(-6f, 6f);
 
@@ -123,6 +125,10 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 sfx.Resume();
             else if (!sliding && sfx.Playing)
                 sfx.Pause();
+
+            if (previousLiftSpeed != Vector2.Zero && LiftSpeed == Vector2.Zero)
+                speed += previousLiftSpeed;
+            previousLiftSpeed = LiftSpeed;
 
             lifeTime += Engine.DeltaTime;
         }
