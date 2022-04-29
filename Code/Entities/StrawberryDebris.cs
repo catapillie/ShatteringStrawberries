@@ -41,8 +41,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         private StrawberrySpreadJuice groundJuice, leftWallJuice, rightWallJuice;
         public readonly Color JuiceColor;
 
-        public StrawberryDebris(Strawberry strawberry, MTexture texture, Color color)
-            : base(Calc.Floor(strawberry.Position)) {
+        public StrawberryDebris(Vector2 position, MTexture texture, Color color)
+            : base(position) {
             Collider = new Hitbox(4, 4, -2, -2);
 
             float angle = Calc.Random.Range(-BlastAngleRange, BlastAngleRange) - MathHelper.PiOver2;
@@ -58,9 +58,6 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
             eventInstance = (EventInstance)new DynData<SoundSource>(sfx)["instance"];
             eventInstance.setVolume(2f);
-
-            BloomPoint bloom = strawberry.Get<BloomPoint>();
-            Add(new BloomPoint(bloom.Alpha / 2f, bloom.Radius / 2f));
 
             shard = texture;
             JuiceColor = color;
