@@ -71,7 +71,9 @@ namespace Celeste.Mod.ShatteringStrawberries {
                 Vector2 from = Calc.Floor(strawberry.Position);
                 for (int i = 0; i < 16; ++i) {
                     MTexture texture = Calc.Random.Choose(shards);
-                    level.Add(new StrawberryDebris(from, texture, color));
+
+                    StrawberryDebris debris = Engine.Pooler.Create<StrawberryDebris>();
+                    level.Add(debris.Init(from, texture, color));
                 }
             }
 

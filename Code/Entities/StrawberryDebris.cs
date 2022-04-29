@@ -6,6 +6,7 @@ using MonoMod.Utils;
 using System;
 
 namespace Celeste.Mod.ShatteringStrawberries.Entities {
+    [Pooled]
     public class StrawberryDebris : Actor {
         public static MTexture[] Shards_Strawberry { get; private set; }
         public static MTexture[] Shards_Ghostberry { get; private set; }
@@ -35,36 +36,46 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
 
         private Level level;
 
-        private readonly MTexture shard;
+        public MTexture Texture { get; private set; }
 
-        private readonly bool spreadsJuice;
+        private bool spreadsJuice;
         private StrawberrySpreadJuice groundJuice, leftWallJuice, rightWallJuice;
-        public readonly Color JuiceColor;
+        public Color JuiceColor { get; private set; }
 
-        public StrawberryDebris(Vector2 position, MTexture texture, Color color)
-            : base(position) {
+        // this entity is handled in a pool, it must have a parameterless ctor
+        // so this is only called once per debris, and when they are removed from the scene, they can be reused,
+        // in which case, we have to rely on StrawberryDebris.Init (down below)
+        public StrawberryDebris()
+            : base(Vector2.Zero) {
             Collider = new Hitbox(4, 4, -2, -2);
+
+            Add(sfx);
+            sfx.Pause();
+            eventInstance = (EventInstance)new DynData<SoundSource>(sfx)["instance"];
+        }
+
+        // we initialize our entity, knowing that it might've previously been instantiated.
+        public StrawberryDebris Init(Vector2 position, MTexture texture, Color juiceColor) {
+            Position = position;
 
             float angle = Calc.Random.Range(-BlastAngleRange, BlastAngleRange) - MathHelper.PiOver2;
             float mag = Calc.Random.Range(80, 160);
 
+            previousLiftSpeed = Vector2.Zero;
             speed = Calc.AngleToVector(angle, mag);
             speed.X *= 1.2f;
             if (speed.Y < 0)
                 speed.Y *= 1.3f;
 
-            Add(sfx);
-            sfx.Pause();
-
-            eventInstance = (EventInstance)new DynData<SoundSource>(sfx)["instance"];
-            eventInstance.setVolume(2f);
-
-            shard = texture;
-            JuiceColor = color;
-
-            spreadsJuice = ShatteringStrawberriesModule.Settings.Juice;
-
             Collidable = false;
+
+            Texture = texture;
+            spreadsJuice = ShatteringStrawberriesModule.Settings.Juice;
+            JuiceColor = juiceColor;
+
+            lifeTime = 0f;
+
+            return this;
         }
 
         private void OnCollideH(CollisionData data) {
@@ -139,8 +150,6 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         public override void Update() {
-            base.Update();
-
             Collidable = true;
 
             bool onGround = OnGround();
@@ -153,10 +162,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 speed.Y = Calc.Approach(speed.Y, MaxFallSpeed, Gravity * Engine.DeltaTime);
 
             if (speed != Vector2.Zero) {
-
-                // Our Y speed has changed sign, so let's dismiss the current spread juice component
                 if (speed.Y * oldYSpeed < 0)
-                    DismissJuice();
+                    DismissJuice(); // Our Y speed has changed sign, so let's dismiss the current spread juice component
 
                 Vector2 oldPos = Position;
 
@@ -240,11 +247,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             Collidable = false;
         }
 
-        public override void Render() {
-            base.Render();
-
-            shard.DrawCentered(Center, Color.White, 1f, rotation);
-        }
+        public override void Render()
+            => Texture.DrawCentered(Center, Color.White, 1f, rotation);
 
         internal static void InitializeContent() {
             Shards_Strawberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/strawberry/").ToArray();
