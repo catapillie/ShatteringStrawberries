@@ -19,6 +19,8 @@ namespace Celeste.Mod.ShatteringStrawberries {
         public static ParticleType P_GhostMoonStrawberryExplode { get; private set; }
 
         public static void OnShatter(this Strawberry strawberry) {
+            Calc.PushRandom();
+
             DynData<Strawberry> data = new(strawberry);
 
             bool ghost = (bool)data["isGhostBerry"];
@@ -78,6 +80,8 @@ namespace Celeste.Mod.ShatteringStrawberries {
             }
 
             Audio.Play(SFX.game_10_puffer_splode, strawberry.Position);
+
+            Calc.PopRandom();
         }
 
         internal static void InitializeContent() {
