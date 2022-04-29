@@ -72,7 +72,7 @@ namespace Celeste.Mod.ShatteringStrawberries {
                 level.Particles.Emit(explodeParticle, position, num);
             }
 
-            int amount = 1;
+            int amount = ShatteringStrawberriesModule.Settings.Shards.Amount();
             if (amount > 0) {
                 color *= 0.75f;
                 Vector2 from = Calc.Floor(strawberry.Position);
