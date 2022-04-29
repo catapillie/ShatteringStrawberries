@@ -21,6 +21,9 @@ namespace Celeste.Mod.ShatteringStrawberries.Components {
 
         private readonly Platform platform;
 
+        private float lifeTimer = 3f, alpha = 1f;
+        private readonly bool fading = ShatteringStrawberriesModule.Settings.Juice == Settings.JuiceSetting.Fading;
+
         public StrawberrySpreadJuice(StrawberryDebris debris, Platform platform, short orientation = 0)
             : base(platform.Position) {
             Tag = Tags.Global;
@@ -55,15 +58,28 @@ namespace Celeste.Mod.ShatteringStrawberries.Components {
             fullTexture.GetSubtexture(0, 0, (int)length, 5, applyTo: texture);
         }
 
-        public override void Update() {
-            base.Update();
-
-            if (platform.Scene == null)
+        public void Dismiss() {
+            if (Math.Abs(extend) <= 3)
                 RemoveSelf();
         }
 
+        public override void Update() {
+            base.Update();
+            if (platform.Scene == null)
+                RemoveSelf();
+            else if (fading) {
+                if (lifeTimer > 0f)
+                    lifeTimer -= Engine.DeltaTime;
+                else if (alpha > 0f) {
+                    alpha -= Engine.DeltaTime / 2f;
+                    if (alpha <= 0f)
+                        RemoveSelf();
+                }
+            }
+        }
+
         public override void Render()
-            => texture?.Draw(platform.Position + offset, Vector2.Zero, color, scale, rotation);
+            => texture?.Draw(platform.Position + offset, Vector2.Zero, color * alpha, scale, rotation);
 
         internal static void InitializeContent() {
             juiceTextures = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/juice/").ToArray();

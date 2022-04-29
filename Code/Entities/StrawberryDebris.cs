@@ -120,6 +120,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             if (spreadsJuice) {
                 Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitY);
                 if (platform != null && groundPlatform != platform) {
+                    groundJuice?.Dismiss();
                     Scene.Add(groundJuice = new StrawberrySpreadJuice(this, platform));
                     groundPlatform = platform;
                 }
@@ -130,6 +131,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             if (spreadsJuice) {
                 Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
                 if (platform != null && leftWallPlatform != platform) {
+                    leftWallJuice?.Dismiss();
                     Scene.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, 1));
                     leftWallPlatform = platform;
                 }
@@ -140,6 +142,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             if (spreadsJuice) {
                 Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
                 if (platform != null && rightWallPlatform != platform) {
+                    rightWallJuice?.Dismiss();
                     Scene.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
                     rightWallPlatform = platform;
                 }
@@ -147,6 +150,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         }
 
         private void DismissJuice() {
+            groundJuice?.Dismiss(); leftWallJuice?.Dismiss(); rightWallJuice?.Dismiss();
             groundJuice = leftWallJuice = rightWallJuice = null;
             groundPlatform = leftWallPlatform = rightWallPlatform = null;
         }
