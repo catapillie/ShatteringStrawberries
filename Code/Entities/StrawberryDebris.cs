@@ -8,6 +8,14 @@ using System;
 namespace Celeste.Mod.ShatteringStrawberries.Entities {
     [Pooled]
     public class StrawberryDebris : Actor {
+        public const float LifetimeMin = 4f;
+        public const float LifetimeMax = 8f;
+        public const float BlastAngleRange = 2.35619449019f;
+        public const float MaxFallSpeed = 280f;
+        public const float Gravity = 220f;
+        public const float AirFriction = 5f;
+        public const float GroundFriction = 75f;
+
         public static MTexture[] Shards_Strawberry { get; private set; }
         public static MTexture[] Shards_Ghostberry { get; private set; }
         public static MTexture[] Shards_Goldenberry { get; private set; }
@@ -15,13 +23,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         public static MTexture[] Shards_Moonberry { get; private set; }
         public static MTexture[] Shards_Ghostmoonberry { get; private set; }
 
-        public const float BlastAngleRange = 2.35619449019f;
-        public const float MaxFallSpeed = 280f;
-        public const float Gravity = 220f;
-        public const float AirFriction = 5f;
-        public const float GroundFriction = 75f;
-
-        private float lifeTime;
+        private float lifeTimer;
 
         private Vector2 speed;
         private Vector2 previousLiftSpeed;
@@ -37,6 +39,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
         private Level level;
 
         public MTexture Texture { get; private set; }
+        private float alpha;
 
         private bool spreadsJuice;
         private StrawberrySpreadJuice groundJuice, leftWallJuice, rightWallJuice;
@@ -73,7 +76,8 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             spreadsJuice = ShatteringStrawberriesModule.Settings.Juice;
             JuiceColor = juiceColor;
 
-            lifeTime = 0f;
+            lifeTimer = Calc.Random.Range(LifetimeMin, LifetimeMax);
+            alpha = 1f;
 
             return this;
         }
@@ -242,13 +246,19 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 speed += previousLiftSpeed;
             previousLiftSpeed = LiftSpeed;
 
-            lifeTime += Engine.DeltaTime;
+            if (lifeTimer > 0f)
+                lifeTimer -= Engine.DeltaTime;
+            else if (alpha > 0f) {
+                alpha -= Engine.DeltaTime;
+                if (alpha <= 0f)
+                    RemoveSelf();
+            }
 
             Collidable = false;
         }
 
         public override void Render()
-            => Texture.DrawCentered(Center, Color.White, 1f, rotation);
+            => Texture.DrawCentered(Center, Color.White * alpha, 1f, rotation);
 
         internal static void InitializeContent() {
             Shards_Strawberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/strawberry/").ToArray();
