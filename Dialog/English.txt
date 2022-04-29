@@ -9,5 +9,5 @@ modoptions_ShatteringStrawberries_Shards_desc=Makes exploding strawberries blast
 
 modoptions_ShatteringStrawberries_Juice=Strawberry Juice
 modoptions_ShatteringStrawberries_Juice_desc=Makes strawberry shards spread juice on the platforms they slide on.
-modoptions_ShatteringStrawberries_Juice_warn_a=WARNING: this can look like blood, and might look disturbing for you.
+modoptions_ShatteringStrawberries_Juice_warn_a=WARNING: This can look like blood, and might look disturbing for you.
 modoptions_ShatteringStrawberries_Juice_warn_b=You may prefer leaving it disabled should you find yourself uncomfortable.
