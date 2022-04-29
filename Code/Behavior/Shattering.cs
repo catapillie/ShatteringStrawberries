@@ -19,6 +19,9 @@ namespace Celeste.Mod.ShatteringStrawberries {
         public static ParticleType P_GhostMoonStrawberryExplode { get; private set; }
 
         public static void OnShatter(this Strawberry strawberry) {
+            if (!ShatteringStrawberriesModule.Settings.Enabled)
+                return;
+
             Calc.PushRandom();
 
             DynData<Strawberry> data = new(strawberry);
