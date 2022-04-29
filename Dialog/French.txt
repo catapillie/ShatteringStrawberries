@@ -1,4 +1,7 @@
 # Leaving the mod's name untranslated.
+# ...
+
+
 
 modoptions_ShatteringStrawberries_Enabled=Activé
 modoptions_ShatteringStrawberries_Enabled_desc=Active ou désactive ce mod.
@@ -10,3 +13,34 @@ modoptions_ShatteringStrawberries_Juice=Jus de fraise
 modoptions_ShatteringStrawberries_Juice_desc=Les éclats de fraises étalent leur jus sur les plateformes sur lesquelles ils glissent.
 modoptions_ShatteringStrawberries_Juice_warn_a=AVERTISSEMENT: Peut ressembler à du sang, et te sembler dérangeant.
 modoptions_ShatteringStrawberries_Juice_warn_b=Tu peux laisser cette option désactivée si tu te sens mal à l'aise.
+
+
+
+settings_ShatteringStrawberries_Shards_None_name=Aucun
+settings_ShatteringStrawberries_Shards_None_info=Aucun morceau n'est créé.
+
+settings_ShatteringStrawberries_Shards_VeryFew_name=Très peu
+settings_ShatteringStrawberries_Shards_VeryFew_info=4 morceaux sont créés.
+
+settings_ShatteringStrawberries_Shards_Few_name=Un peu
+settings_ShatteringStrawberries_Shards_Few_info=8 morceaux sont créés.
+
+settings_ShatteringStrawberries_Shards_Many_name=Beaucoup
+settings_ShatteringStrawberries_Shards_Many_info=16 morceaux sont créés.
+
+settings_ShatteringStrawberries_Shards_TooMuch_name=Trop
+settings_ShatteringStrawberries_Shards_Tooinfo_info=24 morceaux sont créés.
+
+settings_ShatteringStrawberries_Shards_WayTooMuch_name=Beaucoup trop
+settings_ShatteringStrawberries_Shards_WayTooMuch_info=oui
+
+
+
+settings_ShatteringStrawberries_Juice_None_name=Aucun
+settings_ShatteringStrawberries_Juice_None_info=Aucun jus n'appraît.
+
+settings_ShatteringStrawberries_Juice_Fading_name=Disparaîssant
+settings_ShatteringStrawberries_Juice_Fading_info=Du jus apparaît et disparaît avec le temps.
+
+settings_ShatteringStrawberries_Juice_Permanent_name=Permanent
+settings_ShatteringStrawberries_Juice_Permanent_info=Du jus apparaît et reste sur les tuiles du niveau.

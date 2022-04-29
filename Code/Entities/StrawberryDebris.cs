@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.ShatteringStrawberries.Components;
+using Celeste.Mod.ShatteringStrawberries.Settings;
 using FMOD.Studio;
 using Microsoft.Xna.Framework;
 using Monocle;
@@ -74,7 +75,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             Collidable = false;
 
             Texture = texture;
-            spreadsJuice = ShatteringStrawberriesModule.Settings.Juice;
+            spreadsJuice = ShatteringStrawberriesModule.Settings.Juice != JuiceSetting.None;
             JuiceColor = juiceColor;
 
             lifeTimer = Calc.Random.Range(LifetimeMin, LifetimeMax);

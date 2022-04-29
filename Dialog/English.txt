@@ -1,6 +1,8 @@
 modname_ShatteringStrawberries=Shattering Strawberries
 modoptions_ShatteringStrawberries=Shattering Strawberries
 
+
+
 modoptions_ShatteringStrawberries_Enabled=Enabled
 modoptions_ShatteringStrawberries_Enabled_desc=Turns on or off this mod's behavior.
 
@@ -10,4 +12,35 @@ modoptions_ShatteringStrawberries_Shards_desc=Makes exploding strawberries blast
 modoptions_ShatteringStrawberries_Juice=Strawberry Juice
 modoptions_ShatteringStrawberries_Juice_desc=Makes strawberry shards spread juice on the platforms they slide on.
 modoptions_ShatteringStrawberries_Juice_warn_a=WARNING: This can look like blood, and might look disturbing for you.
-modoptions_ShatteringStrawberries_Juice_warn_b=You may prefer leaving it disabled should you find yourself uncomfortable.
+modoptions_ShatteringStrawberries_Juice_warn_b=You may prefer leaving it disabled, should you find yourself uncomfortable.
+
+
+
+settings_ShatteringStrawberries_Shards_None_name=None
+settings_ShatteringStrawberries_Shards_None_info=No shards are created from the explosion.
+
+settings_ShatteringStrawberries_Shards_VeryFew_name=Very few
+settings_ShatteringStrawberries_Shards_VeryFew_info=4 shards are created.
+
+settings_ShatteringStrawberries_Shards_Few_name=Few
+settings_ShatteringStrawberries_Shards_Few_info=8 shards are created.
+
+settings_ShatteringStrawberries_Shards_Many_name=Many
+settings_ShatteringStrawberries_Shards_Many_info=16 shards are created.
+
+settings_ShatteringStrawberries_Shards_TooMuch_name=Too much
+settings_ShatteringStrawberries_Shards_TooMuch_info=24 shards are created.
+
+settings_ShatteringStrawberries_Shards_WayTooMuch_name=Way too much
+settings_ShatteringStrawberries_Shards_WayTooMuch_info=yes
+
+
+
+settings_ShatteringStrawberries_Juice_None_name=None
+settings_ShatteringStrawberries_Juice_None_info=No juice will appear.
+
+settings_ShatteringStrawberries_Juice_Fading_name=Fading
+settings_ShatteringStrawberries_Juice_Fading_info=Juice will appear and fade out with time.
+
+settings_ShatteringStrawberries_Juice_Permanent_name=Permanent
+settings_ShatteringStrawberries_Juice_Permanent_info=Juice will appear and remain on level tiles.

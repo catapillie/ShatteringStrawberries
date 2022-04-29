@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.ShatteringStrawberries.Entities;
+using Celeste.Mod.ShatteringStrawberries.Settings;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
@@ -71,10 +72,11 @@ namespace Celeste.Mod.ShatteringStrawberries {
                 level.Particles.Emit(explodeParticle, position, num);
             }
 
-            if (ShatteringStrawberriesModule.Settings.Shards) {
+            int amount = ShatteringStrawberriesModule.Settings.Shards.Amount();
+            if (amount > 0) {
                 color *= 0.75f;
                 Vector2 from = Calc.Floor(strawberry.Position);
-                for (int i = 0; i < 16; ++i) {
+                for (int i = 0; i < amount; ++i) {
                     MTexture texture = Calc.Random.Choose(shards);
 
                     StrawberryDebris debris = Engine.Pooler.Create<StrawberryDebris>();
