@@ -85,72 +85,84 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             if (!onGround)
                 speed.Y = Calc.Approach(speed.Y, MaxFallSpeed, Gravity * Engine.DeltaTime);
 
-            // Our Y speed has changed sign, so let's dismiss the current spread juice component
-            if (speed.Y * oldYSpeed < 0)
-                DismissJuice();
+            if (speed != Vector2.Zero) {
 
-            Vector2 oldPos = Position;
+                // Our Y speed has changed sign, so let's dismiss the current spread juice component
+                if (speed.Y * oldYSpeed < 0)
+                    DismissJuice();
 
-            hitGround = false;
-            MoveH(speed.X * Engine.DeltaTime, OnCollideH);
-            MoveV(speed.Y * Engine.DeltaTime, OnCollideV);
+                Vector2 oldPos = Position;
 
-            bool doParticles = Scene.OnInterval(0.02f);
+                hitGround = false;
+                MoveH(speed.X * Engine.DeltaTime, OnCollideH);
+                MoveV(speed.Y * Engine.DeltaTime, OnCollideV);
 
-            bool sliding = false;
-            float slideAmount = 0f;
-            bool isCurrentlyOnGround = hitGround || onGround;
+                bool doParticles = Scene.OnInterval(0.035f);
 
-            float dx = X - oldPos.X;
-            float dy = Y - oldPos.Y;
+                bool sliding = false;
+                float slideAmount = 0f;
+                bool isCurrentlyOnGround = hitGround || onGround;
 
-            if (isCurrentlyOnGround && speed.Y == 0 && speed.X != 0) {
-                if (doParticles)
-                    level.Particles.Emit(ParticleTypes.Dust, new Vector2(CenterX, Bottom), Color.White);
+                float dx = X - oldPos.X;
+                float dy = Y - oldPos.Y;
 
-                sliding = true;
-                slideAmount = Math.Abs(speed.X);
+                if (isCurrentlyOnGround) {
+                    if (speed.Y == 0 && speed.X != 0) {
+                        if (doParticles)
+                            level.Particles.Emit(ParticleTypes.Dust, new Vector2(CenterX, Bottom), Color.White);
 
-                TryCreateGroundSpreadJuice();
-                groundJuice?.Extend(dx);
-            } else if (!isCurrentlyOnGround && speed.Y != 0 && speed.X == 0) {
-                Platform platform = null;
+                        sliding = true;
+                        slideAmount = Math.Abs(speed.X);
 
-                if ((platform = CollideFirstOutside<Platform>(Position - Vector2.UnitX)) != null) {
-                    if (doParticles)
-                        level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
+                        TryCreateGroundSpreadJuice();
+                        groundJuice?.Extend(dx);
+                    }
+                } else {
+                    if (speed.Y != 0 && speed.X == 0) {
+                        Platform platform = null;
 
-                    sliding = true;
+                        platform = CollideFirstOutside<Platform>(Position - Vector2.UnitX);
+                        if (platform != null) {
+                            sliding = true;
 
-                    if (leftWallJuice == null && spreadsJuice)
-                        platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, -1));
-                    leftWallJuice?.Extend(dy);
+                            if (doParticles)
+                                level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
+
+                            if (leftWallJuice == null && spreadsJuice)
+                                platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, -1));
+                            leftWallJuice?.Extend(dy);
+                        }
+
+                        platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
+                        if (platform != null) {
+                            sliding = true;
+
+                            if (doParticles)
+                                level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
+
+                            if (rightWallJuice == null && spreadsJuice)
+                                platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                            rightWallJuice?.Extend(dy);
+                        }
+
+                        slideAmount = Math.Abs(speed.Y);
+                    }
                 }
 
-                if ((platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX)) != null) {
-                    if (doParticles)
-                        level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
-
-                    sliding = true;
-
-                    if (rightWallJuice == null && spreadsJuice)
-                        platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
-                    rightWallJuice?.Extend(dy);
+                rotation += rotationVel * Engine.DeltaTime;
+                
+                if (sliding) {
+                    if (!sfx.Playing)
+                        eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
+                } else {
+                    if (sfx.Playing)
+                        sfx.Pause();
+                    DismissJuice();
                 }
-                slideAmount = Math.Abs(speed.Y);
+            } else {
+                if (sfx.Playing)
+                    sfx.Pause();
             }
-
-            rotation += rotationVel * Engine.DeltaTime;
-
-            if (sliding)
-                eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
-            else
-                DismissJuice();
-
-            if (sliding && !sfx.Playing)
-                sfx.Resume();
-            else if (!sliding && sfx.Playing)
-                sfx.Pause();
 
             if (previousLiftSpeed != Vector2.Zero && LiftSpeed == Vector2.Zero)
                 speed += previousLiftSpeed;
