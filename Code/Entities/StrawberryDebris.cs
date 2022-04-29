@@ -158,6 +158,12 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
             level = Scene as Level;
         }
 
+        private bool OutsideBounds() 
+            => Top >= level.Bounds.Bottom + 5
+            || Bottom <= level.Bounds.Top - 5
+            || Left >= level.Bounds.Right + 5
+            || Right <= level.Bounds.Left - 5;
+
         public override void Update() {
             Collidable = true;
 
@@ -240,6 +246,9 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                         sfx.Pause();
                     DismissJuice();
                 }
+
+                if (OutsideBounds())
+                    RemoveSelf();
             } else {
                 if (sfx.Playing)
                     sfx.Pause();
