@@ -4,7 +4,7 @@ using Monocle;
 using System;
 
 namespace Celeste.Mod.ShatteringStrawberries.Components {
-    public class StrawberrySpreadJuice : Component {
+    public class StrawberrySpreadJuice : Entity {
         private static MTexture[] juiceTextures;
 
         private readonly Vector2 offset;
@@ -19,8 +19,16 @@ namespace Celeste.Mod.ShatteringStrawberries.Components {
 
         private readonly Color color;
 
+        private readonly Platform platform;
+
         public StrawberrySpreadJuice(StrawberryDebris debris, Platform platform, short orientation = 0)
-            : base(active: true, visible: true) {
+            : base(platform.Position) {
+            Tag = Tags.Global;
+
+            this.platform = platform;
+
+            Depth = platform.Depth - 1;
+
             Orientation = orientation;
             rotation = -MathHelper.PiOver2 * Orientation;
 
@@ -47,8 +55,15 @@ namespace Celeste.Mod.ShatteringStrawberries.Components {
             fullTexture.GetSubtexture(0, 0, (int)length, 5, applyTo: texture);
         }
 
+        public override void Update() {
+            base.Update();
+
+            if (platform.Scene == null)
+                RemoveSelf();
+        }
+
         public override void Render()
-            => texture?.Draw(Entity.Position + offset, Vector2.Zero, color, scale, rotation);
+            => texture?.Draw(platform.Position + offset, Vector2.Zero, color, scale, rotation);
 
         internal static void InitializeContent() {
             juiceTextures = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/juice/").ToArray();

@@ -117,7 +117,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 if (groundJuice == null) {
                     Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitY);
                     if (platform != null)
-                        platform.Add(groundJuice = new StrawberrySpreadJuice(this, platform));
+                        Scene.Add(groundJuice = new StrawberrySpreadJuice(this, platform));
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 if (leftWallJuice == null) {
                     Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
                     if (platform != null)
-                        platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                        Scene.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, 1));
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                 if (rightWallJuice == null) {
                     Platform platform = CollideFirstOutside<Platform>(Position + Vector2.UnitX);
                     if (platform != null)
-                        platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                        Scene.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                                 level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Left, CenterY), Color.White);
 
                             if (leftWallJuice == null && spreadsJuice)
-                                platform.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, -1));
+                                Scene.Add(leftWallJuice = new StrawberrySpreadJuice(this, platform, -1));
                             leftWallJuice?.Extend(dy);
                         }
 
@@ -219,7 +219,7 @@ namespace Celeste.Mod.ShatteringStrawberries.Entities {
                                 level.ParticlesFG.Emit(ParticleTypes.Dust, new Vector2(Right, CenterY), Color.White);
 
                             if (rightWallJuice == null && spreadsJuice)
-                                platform.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
+                                Scene.Add(rightWallJuice = new StrawberrySpreadJuice(this, platform, 1));
                             rightWallJuice?.Extend(dy);
                         }
 
