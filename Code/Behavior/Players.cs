@@ -14,8 +14,10 @@ public static class Players
 
     public static void OnShatter(PlayerDeadBody body)
     {
+        Calc.PushRandom();
+
         Level level = body.SceneAs<Level>();
-        level.Shake();
+        level.Shake(0.4f);
         level.Displacement.AddBurst(body.Center, 0.4f, 12f, 36f, 0.5f);
 
         for (float num = 0f; num < (float)Math.PI * 2f; num += 0.17453292f)
@@ -48,6 +50,8 @@ public static class Players
         }
 
         Audio.Play(SFX.game_10_puffer_splode, body.Center);
+
+        Calc.PopRandom();
     }
 
     internal static void InitializeContent()
