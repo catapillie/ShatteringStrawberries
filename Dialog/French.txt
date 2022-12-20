@@ -3,8 +3,8 @@
 
 
 
-modoptions_ShatteringStrawberries_Enabled=Activé
-modoptions_ShatteringStrawberries_Enabled_desc=Active ou désactive ce mod.
+modoptions_ShatteringStrawberries_Enabled=Explosions de fraises
+modoptions_ShatteringStrawberries_Enabled_desc=Active ou désactive les explosions de fraises.
 
 modoptions_ShatteringStrawberries_Shards=Morceaux de fraises
 modoptions_ShatteringStrawberries_Shards_desc=Brise les fraises en morceaux envoyés dans toutes les directions.
@@ -13,6 +13,19 @@ modoptions_ShatteringStrawberries_Juice=Jus de fraise
 modoptions_ShatteringStrawberries_Juice_desc=Les éclats de fraises étalent leur jus sur les plateformes sur lesquelles ils glissent.
 modoptions_ShatteringStrawberries_Juice_warn_a=AVERTISSEMENT: Peut ressembler à du sang, et te sembler dérangeant.
 modoptions_ShatteringStrawberries_Juice_warn_b=Tu peux laisser cette option désactivée si tu te sens mal à l'aise.
+
+
+
+modoptions_ShatteringStrawberries_PlayerExplosion=Explosions du joueur
+modoptions_ShatteringStrawberries_PlayerExplosion_desc=Active ou désactive les explosions du joueur.
+
+modoptions_ShatteringStrawberries_PlayerDebris=Débris du joueur
+modoptions_ShatteringStrawberries_PlayerDebris_desc=Le joueur, en explosant, envoie des débris dans toutes les directions.
+
+modoptions_ShatteringStrawberries_PlayerBlood=Sang du joueur
+modoptions_ShatteringStrawberries_PlayerBlood_desc=Les débris du joueur étalent leur sang sur les plateformes sur lesquelles ils glissent.
+modoptions_ShatteringStrawberries_PlayerBlood_warn_a=AVERTISSEMENT: Le sang peut sembler dérangeant pour certains.
+modoptions_ShatteringStrawberries_PlayerBlood_warn_b=Tu peux laisser cette option désactivée si tu te sens mal à l'aise.
 
 
 
@@ -29,10 +42,10 @@ settings_ShatteringStrawberries_Shards_Many_name=Beaucoup
 settings_ShatteringStrawberries_Shards_Many_info=16 morceaux sont créés.
 
 settings_ShatteringStrawberries_Shards_TooMuch_name=Trop
-settings_ShatteringStrawberries_Shards_Tooinfo_info=24 morceaux sont créés.
+settings_ShatteringStrawberries_Shards_TooMuch_info=24 morceaux sont créés.
 
 settings_ShatteringStrawberries_Shards_WayTooMuch_name=Beaucoup trop
-settings_ShatteringStrawberries_Shards_WayTooMuch_info=oui
+settings_ShatteringStrawberries_Shards_WayTooMuch_info=ouais
 
 
 

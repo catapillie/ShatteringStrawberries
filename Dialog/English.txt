@@ -3,16 +3,29 @@ modoptions_ShatteringStrawberries=Shattering Strawberries
 
 
 
-modoptions_ShatteringStrawberries_Enabled=Enabled
-modoptions_ShatteringStrawberries_Enabled_desc=Turns on or off this mod's behavior.
+modoptions_ShatteringStrawberries_Enabled=Strawberry explosion
+modoptions_ShatteringStrawberries_Enabled_desc=Enables strawberry explosions.
 
-modoptions_ShatteringStrawberries_Shards=Strawberry Shards
+modoptions_ShatteringStrawberries_Shards=Strawberry shards
 modoptions_ShatteringStrawberries_Shards_desc=Makes exploding strawberries blast shards in all directions.
 
-modoptions_ShatteringStrawberries_Juice=Strawberry Juice
+modoptions_ShatteringStrawberries_Juice=Strawberry juice
 modoptions_ShatteringStrawberries_Juice_desc=Makes strawberry shards spread juice on the platforms they slide on.
 modoptions_ShatteringStrawberries_Juice_warn_a=WARNING: This can look like blood, and might look disturbing for you.
 modoptions_ShatteringStrawberries_Juice_warn_b=You may prefer leaving it disabled, should you find yourself uncomfortable.
+
+
+
+modoptions_ShatteringStrawberries_PlayerExplosion=Player explosion
+modoptions_ShatteringStrawberries_PlayerExplosion_desc=Enables player explosions.
+
+modoptions_ShatteringStrawberries_PlayerDebris=Player debris
+modoptions_ShatteringStrawberries_PlayerDebris_desc=Makes exploding players blast debris in all directions.
+
+modoptions_ShatteringStrawberries_PlayerBlood=Player blood
+modoptions_ShatteringStrawberries_PlayerBlood_desc=Makes player debris spread blood on the platforms they slide on.
+modoptions_ShatteringStrawberries_PlayerBlood_warn_a=WARNING: This is supposed to look like blood, and might look disturbing.
+modoptions_ShatteringStrawberries_PlayerBlood_warn_b=You may prefer leaving it disabled, should you find yourself uncomfortable.
 
 
 
