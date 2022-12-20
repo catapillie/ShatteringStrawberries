@@ -21,6 +21,13 @@ public static class Strawberries
     public static ParticleType P_MoonStrawberryExplode { get; private set; }
     public static ParticleType P_GhostMoonStrawberryExplode { get; private set; }
 
+    public static MTexture[] Shards_Strawberry { get; private set; }
+    public static MTexture[] Shards_Ghostberry { get; private set; }
+    public static MTexture[] Shards_Goldenberry { get; private set; }
+    public static MTexture[] Shards_Goldghostberry { get; private set; }
+    public static MTexture[] Shards_Moonberry { get; private set; }
+    public static MTexture[] Shards_Ghostmoonberry { get; private set; }
+
     public static void OnShatter(this Strawberry strawberry)
     {
         if (!ShatteringStrawberriesModule.Settings.Enabled)
@@ -40,13 +47,13 @@ public static class Strawberries
             if (ghost)
             {
                 explodeParticle = P_GhostStrawberryExplode;
-                shards = StrawberryDebris.Shards_Goldghostberry;
+                shards = Shards_Goldghostberry;
                 color = GhostStrawberryColor;
             }
             else
             {
                 explodeParticle = P_GoldStrawberryExplode;
-                shards = StrawberryDebris.Shards_Goldenberry;
+                shards = Shards_Goldenberry;
                 color = GoldStrawberryColor;
             }
         }
@@ -55,13 +62,13 @@ public static class Strawberries
             if (ghost)
             {
                 explodeParticle = P_GhostMoonStrawberryExplode;
-                shards = StrawberryDebris.Shards_Ghostmoonberry;
+                shards = Shards_Ghostmoonberry;
                 color = GhostMoonStrawberryColor;
             }
             else
             {
                 explodeParticle = P_MoonStrawberryExplode;
-                shards = StrawberryDebris.Shards_Moonberry;
+                shards = Shards_Moonberry;
                 color = MoonStrawberryColor;
             }
         }
@@ -70,13 +77,13 @@ public static class Strawberries
             if (ghost)
             {
                 explodeParticle = P_GhostStrawberryExplode;
-                shards = StrawberryDebris.Shards_Ghostberry;
+                shards = Shards_Ghostberry;
                 color = GhostStrawberryColor;
             }
             else
             {
                 explodeParticle = P_RedStrawberryExplode;
-                shards = StrawberryDebris.Shards_Strawberry;
+                shards = Shards_Strawberry;
                 color = RedStrawberryColor;
             }
         }
@@ -90,6 +97,7 @@ public static class Strawberries
             level.Particles.Emit(explodeParticle, position, num);
         }
 
+        LiquidSetting juice = ShatteringStrawberriesModule.Settings.Juice;
         int amount = ShatteringStrawberriesModule.Settings.Shards.Amount();
         if (amount > 0)
         {
@@ -98,9 +106,8 @@ public static class Strawberries
             for (int i = 0; i < amount; ++i)
             {
                 MTexture texture = Calc.Random.Choose(shards);
-
-                StrawberryDebris debris = Engine.Pooler.Create<StrawberryDebris>();
-                level.Add(debris.Init(from, texture, color));
+                ExplosionDebris debris = Engine.Pooler.Create<ExplosionDebris>();
+                level.Add(debris.Init(from, texture, juice, color));
             }
         }
 
@@ -137,5 +144,12 @@ public static class Strawberries
         {
             Color2 = GhostMoonStrawberryColor,
         };
+
+        Shards_Strawberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/strawberry/").ToArray();
+        Shards_Ghostberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/ghostberry/").ToArray();
+        Shards_Goldenberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/goldenberry/").ToArray();
+        Shards_Goldghostberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/goldghostberry/").ToArray();
+        Shards_Moonberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/moonberry/").ToArray();
+        Shards_Ghostmoonberry = GFX.Game.GetAtlasSubtextures("ShatteringStrawberries/shards/ghostmoonberry/").ToArray();
     }
 }

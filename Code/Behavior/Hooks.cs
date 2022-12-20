@@ -72,7 +72,6 @@ namespace Celeste.Mod.ShatteringStrawberries
             cursor.Emit(OpCodes.Brfalse_S, next);
 
             cursor.Emit(OpCodes.Ldloc_1);
-            cursor.Emit(OpCodes.Ldfld, f_PlayerDeadBody_player);
             cursor.EmitDelegate(Players.OnShatter);
             
             cursor.Emit(OpCodes.Br_S, skip);

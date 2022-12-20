@@ -1,5 +1,4 @@
 ﻿using Celeste.Mod.ShatteringStrawberries.Components;
-using Celeste.Mod.ShatteringStrawberries.Entities;
 using System;
 
 namespace Celeste.Mod.ShatteringStrawberries {
@@ -21,8 +20,7 @@ namespace Celeste.Mod.ShatteringStrawberries {
             base.LoadContent(firstLoad);
 
             Strawberries.InitializeContent();
-            StrawberryDebris.InitializeContent();
-            StrawberrySpreadJuice.InitializeContent();
+            DebrisLiquid.InitializeContent();
         }
 
         public override void Unload() {
