@@ -47,5 +47,7 @@ namespace Celeste.Mod.ShatteringStrawberries {
             info = item.AddThenGetDescription(menu, Juice.Info());
             item.AddDescription(menu, Dialog.Clean("modoptions_ShatteringStrawberries_Juice_desc"));
         }
+
+        public bool PlayerExplosion { get; set; } = false;
     }
 }

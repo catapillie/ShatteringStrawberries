@@ -20,7 +20,7 @@ namespace Celeste.Mod.ShatteringStrawberries {
         public override void LoadContent(bool firstLoad) {
             base.LoadContent(firstLoad);
 
-            Shattering.InitializeContent();
+            Strawberries.InitializeContent();
             StrawberryDebris.InitializeContent();
             StrawberrySpreadJuice.InitializeContent();
         }
