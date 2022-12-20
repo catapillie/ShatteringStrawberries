@@ -29,8 +29,8 @@ public class ExplosionDebris : Actor
 
     private bool hitGround;
 
-    private readonly SoundSource sfx = new(SFX.char_mad_wallslide);
-    private readonly EventInstance eventInstance;
+    private readonly SoundSource sfx = new();
+    private EventInstance eventInstance;
 
     private Level level;
 
@@ -54,7 +54,6 @@ public class ExplosionDebris : Actor
 
         Add(sfx);
         sfx.Pause();
-        eventInstance = (EventInstance)new DynData<SoundSource>(sfx)["instance"];
     }
 
     // we initialize our entity, knowing that it might've previously been instantiated.
@@ -271,7 +270,16 @@ public class ExplosionDebris : Actor
             if (sliding)
             {
                 if (!sfx.Playing)
-                    eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
+                {
+                    if (eventInstance is null)
+                    {
+                        sfx.Play(SFX.char_mad_wallslide);
+                        eventInstance = (EventInstance)new DynData<SoundSource>(sfx)["instance"];
+                    }
+                    sfx.Resume();
+                }
+
+                eventInstance.setVolume(Calc.Clamp(slideAmount / 24f, 0, 2.25f));
             }
             else
             {
