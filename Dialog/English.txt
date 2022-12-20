@@ -3,7 +3,7 @@ modoptions_ShatteringStrawberries=Shattering Strawberries
 
 
 
-modoptions_ShatteringStrawberries_Enabled=Strawberry explosion
+modoptions_ShatteringStrawberries_Enabled=Strawberry explosions
 modoptions_ShatteringStrawberries_Enabled_desc=Enables strawberry explosions.
 
 modoptions_ShatteringStrawberries_Shards=Strawberry shards
