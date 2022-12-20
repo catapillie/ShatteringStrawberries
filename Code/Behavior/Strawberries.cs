@@ -91,6 +91,7 @@ public static class Strawberries
         Level level = strawberry.SceneAs<Level>();
         level.Shake();
         level.Displacement.AddBurst(strawberry.Position, 0.4f, 12f, 36f, 0.5f);
+
         for (float num = 0f; num < (float)Math.PI * 2f; num += 0.17453292f)
         {
             Vector2 position = strawberry.Center + Calc.AngleToVector(num + Calc.Random.Range(-(float)Math.PI / 90f, (float)Math.PI / 90f), Calc.Random.Range(4, 10));
@@ -99,6 +100,7 @@ public static class Strawberries
 
         LiquidSetting juice = ShatteringStrawberriesModule.Settings.Juice;
         int amount = ShatteringStrawberriesModule.Settings.Shards.Amount();
+
         if (amount > 0)
         {
             color *= 0.75f;

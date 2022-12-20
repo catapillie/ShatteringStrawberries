@@ -36,6 +36,7 @@ public class ExplosionDebris : Actor
 
     public MTexture Texture { get; private set; }
     private float alpha;
+    private bool outline;
 
     private LiquidSetting liquidMode;
     private bool SpreadsLiquid => liquidMode != LiquidSetting.None;
@@ -57,7 +58,7 @@ public class ExplosionDebris : Actor
     }
 
     // we initialize our entity, knowing that it might've previously been instantiated.
-    public ExplosionDebris Init(Vector2 position, MTexture texture, LiquidSetting liquidMode, Color liquidColor)
+    public ExplosionDebris Init(Vector2 position, MTexture texture, LiquidSetting liquidMode, Color liquidColor, bool outline = false)
     {
         Position = position;
 
@@ -80,6 +81,8 @@ public class ExplosionDebris : Actor
         alpha = 1f;
 
         DismissLiquid();
+
+        this.outline = outline;
 
         return this;
     }
@@ -303,13 +306,18 @@ public class ExplosionDebris : Actor
     }
 
     public override void Render()
-        => Texture.DrawCentered(Center, Color.White * alpha, 1f, rotation);
+    {
+        if (outline)
+            Texture.DrawOutlineCentered(Center, Color.White * alpha, 1f, rotation);
+        else
+            Texture.DrawCentered(Center, Color.White * alpha, 1f, rotation);
+    }
 
     public override void Removed(Scene scene)
     {
         base.Removed(scene);
 
-        sfx.Pause();
+        sfx.Stop();
         DismissLiquid();
     }
 }

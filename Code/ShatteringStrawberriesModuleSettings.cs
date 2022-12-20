@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 
 namespace Celeste.Mod.ShatteringStrawberries;
+
 [SettingName("modoptions_ShatteringStrawberries")]
 public class ShatteringStrawberriesModuleSettings : EverestModuleSettings
 {
@@ -62,15 +63,15 @@ public class ShatteringStrawberriesModuleSettings : EverestModuleSettings
     {
         TextMenuExt.EaseInSubHeaderExt info = null;
 
-        var item = new TextMenuExt.EnumSlider<ShardsSetting>(Dialog.Clean("modoptions_ShatteringStrawberries_PlayerDebris"), Shards)
-            .Change(setting => info.Title = (Shards = setting).Info());
+        var item = new TextMenuExt.EnumSlider<ShardsSetting>(Dialog.Clean("modoptions_ShatteringStrawberries_PlayerDebris"), PlayerDebris)
+            .Change(setting => info.Title = (PlayerDebris = setting).Info());
         item.Values = (Enum.GetValues(typeof(ShardsSetting)) as ShardsSetting[])
             .Select(setting => Tuple.Create(setting.Name(), setting))
             .ToList();
 
         menu.Add(item);
 
-        info = item.AddThenGetDescription(menu, Shards.Info());
+        info = item.AddThenGetDescription(menu, PlayerDebris.Info());
         item.AddDescription(menu, Dialog.Clean("modoptions_ShatteringStrawberries_PlayerDebris_desc"));
     }
 
@@ -81,8 +82,8 @@ public class ShatteringStrawberriesModuleSettings : EverestModuleSettings
     {
         TextMenuExt.EaseInSubHeaderExt info = null;
 
-        var item = new TextMenuExt.EnumSlider<LiquidSetting>(Dialog.Clean("modoptions_ShatteringStrawberries_PlayerBlood"), Juice)
-            .Change(setting => info.Title = (Juice = setting).Info());
+        var item = new TextMenuExt.EnumSlider<LiquidSetting>(Dialog.Clean("modoptions_ShatteringStrawberries_PlayerBlood"), PlayerBlood)
+            .Change(setting => info.Title = (PlayerBlood = setting).Info());
         item.Values = (Enum.GetValues(typeof(LiquidSetting)) as LiquidSetting[])
             .Select(setting => Tuple.Create(setting.Name(), setting))
             .ToList();
@@ -91,7 +92,7 @@ public class ShatteringStrawberriesModuleSettings : EverestModuleSettings
 
         item.AddWarning(menu, "         " + Dialog.Clean("modoptions_ShatteringStrawberries_PlayerBlood_warn_b"), icon: false);
         item.AddWarning(menu, "    " + Dialog.Clean("modoptions_ShatteringStrawberries_PlayerBlood_warn_a"), icon: true);
-        info = item.AddThenGetDescription(menu, Juice.Info());
+        info = item.AddThenGetDescription(menu, PlayerBlood.Info());
         item.AddDescription(menu, Dialog.Clean("modoptions_ShatteringStrawberries_PlayerBlood_desc"));
     }
 }

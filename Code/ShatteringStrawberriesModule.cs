@@ -20,6 +20,7 @@ namespace Celeste.Mod.ShatteringStrawberries {
             base.LoadContent(firstLoad);
 
             Strawberries.InitializeContent();
+            Players.InitializeContent();
             DebrisLiquid.InitializeContent();
         }
 

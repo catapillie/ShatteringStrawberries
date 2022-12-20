@@ -1,10 +1,8 @@
-﻿using Celeste.Mod.ShatteringStrawberries.Behavior;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
-using System;
 using System.Reflection;
 
 namespace Celeste.Mod.ShatteringStrawberries
