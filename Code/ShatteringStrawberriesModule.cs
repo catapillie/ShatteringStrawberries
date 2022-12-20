@@ -1,31 +1,36 @@
 ﻿using Celeste.Mod.ShatteringStrawberries.Components;
 using System;
 
-namespace Celeste.Mod.ShatteringStrawberries {
-    public class ShatteringStrawberriesModule : EverestModule {
-        public static ShatteringStrawberriesModule Instance { get; private set; }
+namespace Celeste.Mod.ShatteringStrawberries;
 
-        public override Type SettingsType => typeof(ShatteringStrawberriesModuleSettings);
-        public static ShatteringStrawberriesModuleSettings Settings => (ShatteringStrawberriesModuleSettings) Instance._Settings;
+public class ShatteringStrawberriesModule : EverestModule
+{
+    public static ShatteringStrawberriesModule Instance { get; private set; }
 
-        public ShatteringStrawberriesModule() {
-            Instance = this;
-        }
+    public override Type SettingsType => typeof(ShatteringStrawberriesModuleSettings);
+    public static ShatteringStrawberriesModuleSettings Settings => (ShatteringStrawberriesModuleSettings)Instance._Settings;
 
-        public override void Load() {
-            Hooks.Hook();
-        }
+    public ShatteringStrawberriesModule()
+    {
+        Instance = this;
+    }
 
-        public override void LoadContent(bool firstLoad) {
-            base.LoadContent(firstLoad);
+    public override void Load()
+    {
+        Hooks.Hook();
+    }
 
-            Strawberries.InitializeContent();
-            Players.InitializeContent();
-            DebrisLiquid.InitializeContent();
-        }
+    public override void LoadContent(bool firstLoad)
+    {
+        base.LoadContent(firstLoad);
 
-        public override void Unload() {
-            Hooks.Unhook();
-        }
+        Strawberries.InitializeContent();
+        Players.InitializeContent();
+        DebrisLiquid.InitializeContent();
+    }
+
+    public override void Unload()
+    {
+        Hooks.Unhook();
     }
 }
